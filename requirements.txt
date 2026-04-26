@@ -1,0 +1,13 @@
+# Managed by conda env: myTools
+# To set up: conda activate myTools
+#
+# Core
+openbb>=4.7
+numpy>=2.4
+pandas>=3.0
+
+# Visualization
+matplotlib>=3.10
+
+# Jupyter
+jupyterlab>=4.5

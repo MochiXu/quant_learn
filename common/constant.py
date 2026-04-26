@@ -1,0 +1,109 @@
+from pathlib import Path
+from typing import Literal
+
+
+POOL = {
+    "fund": {
+        "510300": {
+            "name": "沪深300ETF",
+            "asset_category": "大盘宽基",
+            "role": "A股核心资产",
+        },
+        "510500": {
+            "name": "中证500ETF",
+            "asset_category": "中盘宽基",
+            "role": "增加中盘弹性",
+        },
+        "512100": {
+            "name": "中证1000ETF",
+            "asset_category": "小盘宽基",
+            "role": "增加小盘暴露",
+        },
+        "159531": {
+            "name": "中证2000ETF",
+            "asset_category": "小盘/微盘宽基",
+            "role": "增加更小市值暴露",
+        },
+        "518880": {
+            "name": "黄金ETF",
+            "asset_category": "黄金",
+            "role": "分散风险",
+        },
+        "511010": {
+            "name": "国债ETF",
+            "asset_category": "国债",
+            "role": "降低组合波动",
+        },
+        "511880": {
+            "name": "银华日利",
+            "asset_category": "货币",
+            "role": "现金管理",
+        },
+    },
+    "stock": {
+        "300750": {
+            "name": "宁德时代",
+            "asset_category": "新能源/电池",
+            "role": "成长制造龙头观察",
+        },
+        "600519": {
+            "name": "贵州茅台",
+            "asset_category": "白酒/消费",
+            "role": "消费龙头观察",
+        },
+        "601318": {
+            "name": "中国平安",
+            "asset_category": "保险/金融",
+            "role": "大金融代表观察",
+        },
+        "300308": {
+            "name": "中际旭创",
+            "asset_category": "AI算力/光模块",
+            "role": "科技成长代表观察",
+        },
+        "601899": {
+            "name": "紫金矿业",
+            "asset_category": "有色/资源",
+            "role": "资源周期代表观察",
+        },
+        "600036": {
+            "name": "招商银行",
+            "asset_category": "银行",
+            "role": "优质银行代表观察",
+        },
+        "300502": {
+            "name": "新易盛",
+            "asset_category": "AI算力/光模块",
+            "role": "科技高弹性代表观察",
+        },
+        "000333": {
+            "name": "美的集团",
+            "asset_category": "家电/制造",
+            "role": "稳定制造代表观察",
+        },
+        "601166": {
+            "name": "兴业银行",
+            "asset_category": "银行",
+            "role": "银行代表观察",
+        },
+        "600900": {
+            "name": "长江电力",
+            "asset_category": "公用事业/电力",
+            "role": "高股息防御代表观察",
+        },
+    },
+}
+
+
+AssetType = Literal["fund", "stock"]
+AdjustType = Literal["raw", "qfq", "hfq"]
+
+ADJUST_TYPE_MAP: dict[AdjustType, str] = {
+    "raw": "原始",
+    "qfq": "前复权",
+    "hfq": "后复权",
+}
+
+
+FUND_DIR = Path(__file__).resolve().parent.parent / "data" / "raw" / "akshare" / "fund"
+STOCK_DIR = Path(__file__).resolve().parent.parent / "data" / "raw" / "tushare" / "stock"
