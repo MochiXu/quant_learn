@@ -107,3 +107,21 @@ ADJUST_TYPE_MAP: dict[AdjustType, str] = {
 
 FUND_DIR = Path(__file__).resolve().parent.parent / "data" / "raw" / "akshare" / "fund"
 STOCK_DIR = Path(__file__).resolve().parent.parent / "data" / "raw" / "tushare" / "stock"
+
+
+# 行业轮动专用 ETF 池：对照 SPDR Select Sector (XL-)。
+# 主集 7 只皆为 2013-2014 年成立的中证/上证一级行业 ETF，可支撑 10 年回测。
+# 注释掉的 3 只是细分行业（成立较晚），需要时放开即可。
+SECTOR_ETFS: dict[str, dict[str, str]] = {
+    "510230": {"name": "金融ETF", "sector": "金融", "us_analog": "XLF"},
+    "159939": {"name": "信息技术ETF", "sector": "信息技术", "us_analog": "XLK"},
+    "159928": {"name": "消费ETF", "sector": "主要消费", "us_analog": "XLP/XLY"},
+    "159930": {"name": "能源ETF", "sector": "能源", "us_analog": "XLE"},
+    "159938": {"name": "医药ETF", "sector": "医药卫生", "us_analog": "XLV"},
+    "159945": {"name": "工业ETF", "sector": "工业", "us_analog": "XLI"},
+    "159944": {"name": "材料ETF", "sector": "材料", "us_analog": "XLB"},
+    # Optional (shorter history):
+    # "159952": {"name": "可选消费ETF", "sector": "可选消费", "us_analog": "XLY"},
+    # "512000": {"name": "券商ETF",     "sector": "券商",     "us_analog": "XLF (sub)"},
+    # "512760": {"name": "半导体ETF",   "sector": "半导体",   "us_analog": "XLK (sub)"},
+}

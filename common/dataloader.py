@@ -1,8 +1,8 @@
 
 
-from common.constant import AssetType
 import pandas as pd
-from common.constant import FUND_DIR, STOCK_DIR, POOL, AdjustType
+
+from common.constant import AssetType, AdjustType, FUND_DIR, STOCK_DIR, POOL
 
 
 def load_close_prices(asset_type: AssetType, adjust_type: AdjustType) -> pd.DataFrame:
@@ -95,3 +95,37 @@ def load_ohlcv(
         df = df.loc[:pd.to_datetime(end)]
 
     return df
+
+# 用于加载分析板块轮动的 ETF 数据
+def load_sector_etf_prices(
+    etfs: dict[str, dict[str, str]],
+    adjust_type: AdjustType = "hfq",
+) -> pd.DataFrame:
+    """Load close prices for an arbitrary sector-style ETF dict.
+
+    Sector ETFs have non-aligned listing dates (e.g. 159938/159944/159945 start
+    in 2014, others in 2013), so we ffill across calendars to keep the wide
+    matrix dense. The strategy itself still gates on `dropna(axis=1)` per
+    lookback window to avoid look-ahead.
+    """
+    base_dir = FUND_DIR / adjust_type
+
+    series_list: list[pd.Series] = []
+    for code, meta in etfs.items():
+        path = base_dir / f"{code}.parquet"
+        if not path.exists():
+            print(f"[skip] missing ETF {code}: {path}")
+            continue
+
+        df = pd.read_parquet(path, columns=["date", "close"])
+        df["date"] = pd.to_datetime(df["date"])
+        close_series = df.set_index("date")["close"].sort_index()
+        close_series = close_series[~close_series.index.duplicated(keep="first")]
+        close_series.name = meta.get("name", code)
+        series_list.append(close_series)
+
+    if not series_list:
+        raise RuntimeError("No sector ETF data loaded — download them first.")
+
+    prices = pd.concat(series_list, axis=1).sort_index()
+    return prices.ffill()
